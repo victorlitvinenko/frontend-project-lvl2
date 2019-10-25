@@ -1,11 +1,11 @@
 plugins:
   # https://github.com/jest-community/eslint-plugin-jest
-  #- jest
+  - jest
   - babel
 
 env:
   node: true
-  # jest: true
+  jest: true
 
 parser: babel-eslint
 

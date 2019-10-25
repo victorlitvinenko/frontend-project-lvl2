@@ -19,7 +19,7 @@ export default (pathToFile1, pathToFile2) => {
       }
       return `${acc}  - ${element}: ${object1[element]}\n`;
     }, ''));
-    return `{\n${result}}`;
+    return `{\n${result}}\n`;
   }
   return false;
 };
