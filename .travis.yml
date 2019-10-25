@@ -3,5 +3,15 @@ language: node_js
 node_js:
   - node
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=7041d47e1a771e496b3aed2472626692a10f1f89a39ae97b6d6dc5bf9b025987
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
-  - npx jest
+  - make lint
+  - make test
