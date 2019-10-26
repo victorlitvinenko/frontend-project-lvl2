@@ -8,4 +8,5 @@
 
 ### Using
 ```gendiff <pathToFile1> <pathToFile2>```
+
 [![asciicast](https://asciinema.org/a/kD8RSPI7dqGVyp7kAjWizYXxz.svg)](https://asciinema.org/a/kD8RSPI7dqGVyp7kAjWizYXxz)
