@@ -5,17 +5,17 @@ const path = require('path');
 const actions = [
   {
     check: (arg) => path.extname(arg) === '.json',
-    process: (pathToFile) => JSON.parse(fs.readFileSync(pathToFile, 'utf8')),
+    process: JSON.parse,
   },
   {
     check: (arg) => path.extname(arg) === '.yml',
-    process: (pathToFile) => yaml.safeLoad(fs.readFileSync(pathToFile, 'utf8')),
+    process: yaml.safeLoad,
   },
 ];
 const getAction = (arg) => actions.find(({ check }) => check(arg));
 const getObject = (pathToFile) => {
   const { process } = getAction(pathToFile);
-  return process(pathToFile);
+  return process(fs.readFileSync(pathToFile, 'utf8'));
 };
 
 export default (pathToFile1, pathToFile2) => [getObject(pathToFile1), getObject(pathToFile2)];
