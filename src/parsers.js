@@ -12,9 +12,8 @@ const actions = [
     process: yaml.safeLoad,
   },
 ];
-const getAction = (arg) => actions.find(({ check }) => check(arg));
 const getObject = (pathToFile) => {
-  const { process } = getAction(pathToFile);
+  const { process } = actions.find(({ check }) => check(pathToFile));
   return process(fs.readFileSync(pathToFile, 'utf8'));
 };
 
