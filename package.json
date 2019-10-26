@@ -1,6 +1,6 @@
 {
   "name": "frontend-gendiff-lvl2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Command-line Difference Calculator.",
   "keywords": [
     "cli",

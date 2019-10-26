@@ -5,6 +5,9 @@
 <a href="https://codeclimate.com/github/victorlitvinenko/frontend-project-lvl2/test_coverage"><img src="https://api.codeclimate.com/v1/badges/ca2ac9d4aebb1fff519e/test_coverage" /></a>
 </p>
 
+## Description
+Gendiff is a command-line difference calculator.
+
 ## Installation
 ```sudo npm install -g frontend-gendiff-lvl2```
 
