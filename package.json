@@ -5,8 +5,10 @@
   "keywords": [
     "cli",
     "difference",
+    "different",
     "json",
     "yml",
+    "calc",
     "calculator"
   ],
   "main": "dist/index.js",
