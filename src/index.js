@@ -1,10 +1,11 @@
+import parse from './parsers';
+
 const fs = require('fs');
 const _ = require('lodash');
 
 export default (pathToFile1, pathToFile2) => {
   if (fs.existsSync(pathToFile1) && fs.existsSync(pathToFile2)) {
-    const object1 = JSON.parse(fs.readFileSync(pathToFile1, 'utf8'));
-    const object2 = JSON.parse(fs.readFileSync(pathToFile2, 'utf8'));
+    const [object1, object2] = parse(pathToFile1, pathToFile2);
     const result = Object.keys(object2).reduce((acc, element) => {
       if (!_.has(object1, element)) {
         return `${acc}  + ${element}: ${object2[element]}\n`;
