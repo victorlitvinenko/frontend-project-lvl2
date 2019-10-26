@@ -1,7 +1,14 @@
 {
   "name": "frontend-gendiff-lvl2",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "Command-line Difference Calculator.",
+  "keywords": [
+    "cli",
+    "difference",
+    "json",
+    "yml",
+    "calculator"
+  ],
   "main": "dist/index.js",
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
