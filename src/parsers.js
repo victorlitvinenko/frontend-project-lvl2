@@ -1,4 +1,5 @@
 const fs = require('fs');
+const ini = require('ini');
 const yaml = require('js-yaml');
 const path = require('path');
 
@@ -10,6 +11,10 @@ const actions = [
   {
     check: (arg) => path.extname(arg) === '.yml',
     process: yaml.safeLoad,
+  },
+  {
+    check: (arg) => path.extname(arg) === '.ini',
+    process: ini.parse,
   },
 ];
 const getObject = (pathToFile) => {
