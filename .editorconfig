@@ -1,7 +1,3 @@
-# EditorConfig helps developers define and maintain consistent
-# coding styles between different editors and IDEs
-# editorconfig.org
-
 root = true
 
 [*]
@@ -18,3 +14,6 @@ insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = false
+
+[__tests__/**]
+insert_final_newline = false
