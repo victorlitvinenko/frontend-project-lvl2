@@ -1,12 +1,14 @@
 import genDiff from '../src';
-import { render, stringify } from '../src/parsers';
+import { stringify } from '../src/formatters/nested';
 
 const fs = require('fs');
 
+const extensions = [['json'], ['yml'], ['ini']];
 const expected = fs.readFileSync(`${__dirname}/__fixtures__/result.txt`, 'utf8');
 const expectedNested = fs.readFileSync(`${__dirname}/__fixtures__/nested/result.txt`, 'utf8');
+const expectedPlain = fs.readFileSync(`${__dirname}/__fixtures__/nested/resultPlain.txt`, 'utf8');
 
-test.each([['json'], ['yml'], ['ini']])(
+test.each(extensions)(
   'genDiff(%s)',
   (ext) => {
     const result = genDiff(`${__dirname}/__fixtures__/before.${ext}`, `${__dirname}/__fixtures__/after.${ext}`);
@@ -14,7 +16,7 @@ test.each([['json'], ['yml'], ['ini']])(
   },
 );
 
-test.each([['json'], ['yml'], ['ini']])(
+test.each(extensions)(
   'Nested genDiff(%s)',
   (ext) => {
     const result = genDiff(`${__dirname}/__fixtures__/nested/before.${ext}`, `${__dirname}/__fixtures__/nested/after.${ext}`);
@@ -22,15 +24,18 @@ test.each([['json'], ['yml'], ['ini']])(
   },
 );
 
+test.each(extensions)(
+  'Plain genDiff(%s)',
+  (ext) => {
+    const result = genDiff(`${__dirname}/__fixtures__/nested/before.${ext}`, `${__dirname}/__fixtures__/nested/after.${ext}`, 'plain');
+    expect(result).toMatch(expectedPlain);
+  },
+);
+
 test('genDiff(empty)', () => {
   expect(genDiff()).toBeFalsy();
 });
 
-test('render without normal status', () => {
-  expect(render([{ status: 'empty' }])).toMatch('{\n}');
-});
-
 test('stringify', () => {
   expect(stringify('123')).toMatch('123');
-  expect(stringify({})).toMatch('{\n}');
 });
