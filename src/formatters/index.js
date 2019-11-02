@@ -1,11 +1,14 @@
-import formatNested from './nested';
-import formatPlain from './plain';
+import renderNested from './nested';
+import renderPlain from './plain';
+import renderJson from './json';
 
 export default (elements, format) => {
   switch (format) {
     case 'plain':
-      return formatPlain(elements);
+      return renderPlain(elements);
+    case 'json':
+      return renderJson(elements);
     default:
-      return formatNested(elements);
+      return renderNested(elements);
   }
 };

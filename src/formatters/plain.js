@@ -10,9 +10,9 @@ const render = (elements, parents = []) => {
       case 'deleted':
         return `${acc}Property '${newName}' was removed\n`;
       case 'added':
-        return `${acc}Property '${newName}' was added with value: ${prepareString(elem.after)}\n`;
+        return `${acc}Property '${newName}' was added with value: ${prepareString(elem.value)}\n`;
       case 'edited':
-        return `${acc}Property '${newName}' was updated. From ${prepareString(elem.before)} to ${prepareString(elem.after)}\n`;
+        return `${acc}Property '${newName}' was updated. From ${prepareString(elem.value)} to ${prepareString(elem.newValue)}\n`;
       case 'children':
         return `${acc}${render(elem.children, [...parents, elem.name])}`;
       default:

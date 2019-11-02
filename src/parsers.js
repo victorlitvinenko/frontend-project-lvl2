@@ -29,9 +29,9 @@ const getObjects = (pathToFile1, pathToFile2) => (
 
 const parse = (object1, object2) => (
   Object.keys({ ...object1, ...object2 }).sort().reduce((acc, elem) => {
-    if (object1[elem] === object2[elem]) return [...acc, { name: elem, status: 'unchanged', before: object1[elem] }];
-    if (object2[elem] === undefined) return [...acc, { name: elem, status: 'deleted', before: object1[elem] }];
-    if (object1[elem] === undefined) return [...acc, { name: elem, status: 'added', after: object2[elem] }];
+    if (object1[elem] === object2[elem]) return [...acc, { name: elem, status: 'unchanged', value: object1[elem] }];
+    if (object2[elem] === undefined) return [...acc, { name: elem, status: 'deleted', value: object1[elem] }];
+    if (object1[elem] === undefined) return [...acc, { name: elem, status: 'added', value: object2[elem] }];
     // Objects are not equal:
     if (object1[elem] instanceof Object && object2[elem] instanceof Object) {
       return [
@@ -44,7 +44,7 @@ const parse = (object1, object2) => (
     return [
       ...acc,
       {
-        name: elem, status: 'edited', before: object1[elem], after: object2[elem],
+        name: elem, status: 'edited', value: object1[elem], newValue: object2[elem],
       },
     ];
   }, []));
