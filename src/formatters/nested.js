@@ -10,11 +10,14 @@ export const stringify = (value, level = 0) => {
 const render = (elements, level = 0) => {
   const indent = '    '.repeat(level);
   const result = elements.reduce((acc, elem) => {
+    const preparedStr = (char) => (
+      `${acc}\n${indent}  ${char} ${elem.name}: ${stringify(elem.value, level + 1)}`
+    );
     switch (elem.status) {
       case 'deleted':
-        return `${acc}\n${indent}  - ${elem.name}: ${stringify(elem.value, level + 1)}`;
+        return preparedStr('-');
       case 'added':
-        return `${acc}\n${indent}  + ${elem.name}: ${stringify(elem.value, level + 1)}`;
+        return preparedStr('+');
       case 'edited':
         return `${acc}\n${indent}  - ${elem.name}: ${stringify(elem.value, level + 1)}
 ${indent}  + ${elem.name}: ${stringify(elem.newValue, level + 1)}`;
@@ -22,7 +25,7 @@ ${indent}  + ${elem.name}: ${stringify(elem.newValue, level + 1)}`;
         return `${acc}\n${indent}    ${elem.name}: ${render(elem.children, level + 1)}`;
       // case 'unchanged':
       default:
-        return `${acc}\n${indent}    ${elem.name}: ${stringify(elem.value, level + 1)}`;
+        return preparedStr(' ');
     }
   }, '');
   return `{${result}\n${indent}}`;
