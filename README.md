@@ -6,7 +6,7 @@
 </p>
 
 ## Description
-Gendiff is a command-line difference calculator.
+Gendiff is a command-line difference calculator.  
 Compares two configuration files and shows a difference.
 
 ## Installation
