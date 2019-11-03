@@ -7,11 +7,20 @@
 
 ## Description
 Gendiff is a command-line difference calculator.
+Compares two configuration files and shows a difference.
 
 ## Installation
 ```sudo npm install -g frontend-gendiff-lvl2```
 
 ## Usage
-```gendiff <pathToFile1> <pathToFile2>```
+```gendiff [options] <pathToFile1> <pathToFile2>```
 
-[![asciicast](https://asciinema.org/a/kD8RSPI7dqGVyp7kAjWizYXxz.svg)](https://asciinema.org/a/kD8RSPI7dqGVyp7kAjWizYXxz)
+Options:
+  -V, --version        output the version number
+  -f, --format [type]  Output format
+  -h, --help           output usage information
+
+[type] - `plain`, `json`, ``
+<pathToFile> - path to json, yaml or ini configuration file
+
+[![asciicast](https://asciinema.org/a/mDkLZm4HNMw9emKexJNvfSMHB.svg)](https://asciinema.org/a/mDkLZm4HNMw9emKexJNvfSMHB)
