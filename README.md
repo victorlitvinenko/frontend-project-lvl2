@@ -16,11 +16,11 @@ Compares two configuration files and shows a difference.
 ```gendiff [options] <pathToFile1> <pathToFile2>```
 
 Options:
-  -V, --version        output the version number
-  -f, --format [type]  Output format
-  -h, --help           output usage information
+`-V, --version` output the version number
+`-f, --format [type]` Output format
+`-h, --help` output usage information
 
-[type] - `plain`, `json`, ``
-<pathToFile> - path to json, yaml or ini configuration file
+`[type]` - `plain`, `json`, `nested`
+`<pathToFile>` - path to json, yaml or ini configuration file
 
 [![asciicast](https://asciinema.org/a/mDkLZm4HNMw9emKexJNvfSMHB.svg)](https://asciinema.org/a/mDkLZm4HNMw9emKexJNvfSMHB)
