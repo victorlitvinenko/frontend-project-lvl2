@@ -1,4 +1,5 @@
 const fs = require('fs');
+const _ = require('lodash');
 const ini = require('ini');
 const yaml = require('js-yaml');
 const path = require('path');
@@ -23,33 +24,25 @@ const getObject = (pathToFile) => {
   return process(fs.readFileSync(pathToFile, 'utf8'));
 };
 
-const getObjects = (pathToFile1, pathToFile2) => (
-  [getObject(pathToFile1), getObject(pathToFile2)]
-);
-
-const parse = (object1, object2) => (
-  Object.keys({ ...object1, ...object2 }).sort().reduce((acc, elem) => {
-    if (object1[elem] === object2[elem]) return [...acc, { name: elem, status: 'unchanged', value: object1[elem] }];
-    if (object2[elem] === undefined) return [...acc, { name: elem, status: 'deleted', value: object1[elem] }];
-    if (object1[elem] === undefined) return [...acc, { name: elem, status: 'added', value: object2[elem] }];
-    // Objects are not equal:
-    if (object1[elem] instanceof Object && object2[elem] instanceof Object) {
+const parse = (obj1, obj2) => (
+  _.union(_.keys(obj1), _.keys(obj2)).sort().reduce((acc, name) => {
+    if (obj1[name] === obj2[name]) return [...acc, { name, status: 'unchanged', value: obj1[name] }];
+    if (obj2[name] === undefined) return [...acc, { name, status: 'deleted', value: obj1[name] }];
+    if (obj1[name] === undefined) return [...acc, { name, status: 'added', value: obj2[name] }];
+    if (_.isObject(obj1[name]) && _.isObject(obj2[name])) {
       return [
         ...acc,
         {
-          name: elem, status: 'children', children: parse(object1[elem], object2[elem]),
+          name, status: 'children', children: parse(obj1[name], obj2[name]),
         },
       ];
     }
     return [
       ...acc,
       {
-        name: elem, status: 'edited', value: object1[elem], newValue: object2[elem],
+        name, status: 'edited', value: obj1[name], newValue: obj2[name],
       },
     ];
   }, []));
 
-export default (pathToFile1, pathToFile2) => {
-  const [object1, object2] = getObjects(pathToFile1, pathToFile2);
-  return parse(object1, object2);
-};
+export default (pathToFile1, pathToFile2) => parse(getObject(pathToFile1), getObject(pathToFile2));

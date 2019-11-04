@@ -1,6 +1,8 @@
-export const stringify = (value) => {
-  if (value instanceof Object) {
-    const result = Object.keys(value).reduce((acc, elem) => [...acc, `"${elem}":${stringify(value[elem])}`], []);
+const _ = require('lodash');
+
+const stringify = (value) => {
+  if (_.isObject(value)) {
+    const result = _.keys(value).reduce((acc, elem) => [...acc, `"${elem}":${stringify(value[elem])}`], []);
     return `{${result.join(',')}}`;
   }
   return `"${value}"`;
@@ -9,17 +11,12 @@ export const stringify = (value) => {
 const render = (elements) => {
   const result = elements.reduce((acc, elem) => {
     switch (elem.status) {
-      case 'deleted':
-        return [...acc, `{"name":"${elem.name}","status":"deleted","value":${stringify(elem.value)}}`];
-      case 'added':
-        return [...acc, `{"name":"${elem.name}","status":"added","value":${stringify(elem.value)}}`];
       case 'edited':
-        return [...acc, `{"name":"${elem.name}","status":"edited","value":${stringify(elem.value)},"newValue":${stringify(elem.newValue)}}`];
+        return [...acc, `{"name":"${elem.name}","status":"${elem.status}","value":${stringify(elem.value)},"newValue":${stringify(elem.newValue)}}`];
       case 'children':
-        return [...acc, `{"name":"${elem.name}","status":"children","children":${render(elem.children)}}`];
-      // case 'unchanged':
+        return [...acc, `{"name":"${elem.name}","status":"${elem.status}","children":${render(elem.children)}}`];
       default:
-        return [...acc, `{"name":"${elem.name}","status":"unchanged","value":${stringify(elem.value)}}`];
+        return [...acc, `{"name":"${elem.name}","status":"${elem.status}","value":${stringify(elem.value)}}`];
     }
   }, []);
   return `[${result.join(',')}]`;
