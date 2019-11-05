@@ -4,7 +4,7 @@ const ini = require('ini');
 const yaml = require('js-yaml');
 const path = require('path');
 
-const actions = [
+const fileTypes = [
   {
     check: (arg) => path.extname(arg) === '.json',
     process: JSON.parse,
@@ -18,31 +18,50 @@ const actions = [
     process: ini.parse,
   },
 ];
-
 const getObject = (pathToFile) => {
-  const { process } = actions.find(({ check }) => check(pathToFile));
+  const { process } = fileTypes.find(({ check }) => check(pathToFile));
   return process(fs.readFileSync(pathToFile, 'utf8'));
 };
 
-const parse = (obj1, obj2) => (
-  _.union(_.keys(obj1), _.keys(obj2)).sort().reduce((acc, name) => {
-    if (obj1[name] === obj2[name]) return [...acc, { name, status: 'unchanged', value: obj1[name] }];
-    if (obj2[name] === undefined) return [...acc, { name, status: 'deleted', value: obj1[name] }];
-    if (obj1[name] === undefined) return [...acc, { name, status: 'added', value: obj2[name] }];
-    if (_.isObject(obj1[name]) && _.isObject(obj2[name])) {
-      return [
-        ...acc,
-        {
-          name, status: 'children', children: parse(obj1[name], obj2[name]),
-        },
-      ];
-    }
-    return [
-      ...acc,
-      {
-        name, status: 'edited', value: obj1[name], newValue: obj2[name],
-      },
-    ];
-  }, []));
+const keyTypes = [
+  {
+    type: 'nested',
+    check: (first, second, key) => (_.isObject(first[key]) && _.isObject(second[key])),
+    process: (first, second, fn) => fn(first, second),
+  },
+  {
+    type: 'unchanged',
+    check: (first, second, key) => (_.has(first, key) && _.has(second, key)
+      && (first[key] === second[key])),
+    process: (first) => _.identity(first),
+  },
+  {
+    type: 'changed',
+    check: (first, second, key) => (_.has(first, key) && _.has(second, key)
+      && (first[key] !== second[key])),
+    process: (first, second) => ({ old: first, new: second }),
+  },
+  {
+    type: 'deleted',
+    check: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
+    process: (first) => _.identity(first),
+  },
+  {
+    type: 'added',
+    check: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
+    process: (first, second) => _.identity(second),
+  },
+];
 
-export default (pathToFile1, pathToFile2) => parse(getObject(pathToFile1), getObject(pathToFile2));
+export const getAst = (obj1 = {}, obj2 = {}) => {
+  const configsKeys = _.union(_.keys(obj1), _.keys(obj2)).sort();
+  return configsKeys.map((key) => {
+    const { type, process } = keyTypes.find(
+      (item) => item.check(obj1, obj2, key),
+    );
+    const value = process(obj1[key], obj2[key], getAst);
+    return { name: key, type, value };
+  });
+};
+
+export default (pathToFile1, pathToFile2) => getAst(getObject(pathToFile1), getObject(pathToFile2));
