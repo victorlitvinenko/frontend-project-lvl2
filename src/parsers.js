@@ -18,7 +18,8 @@ const fileTypes = [
     process: ini.parse,
   },
 ];
-const getObject = (pathToFile) => {
+
+const parseFile = (pathToFile) => {
   const { process } = fileTypes.find(({ check }) => check(pathToFile));
   return process(fs.readFileSync(pathToFile, 'utf8'));
 };
@@ -53,15 +54,15 @@ const keyTypes = [
   },
 ];
 
-export const getAst = (obj1 = {}, obj2 = {}) => {
-  const configsKeys = _.union(_.keys(obj1), _.keys(obj2)).sort();
+export const getAst = (config1 = {}, config2 = {}) => {
+  const configsKeys = _.union(_.keys(config1), _.keys(config2)).sort();
   return configsKeys.map((key) => {
     const { type, process } = keyTypes.find(
-      (item) => item.check(obj1, obj2, key),
+      (item) => item.check(config1, config2, key),
     );
-    const value = process(obj1[key], obj2[key], getAst);
+    const value = process(config1[key], config2[key], getAst);
     return { name: key, type, value };
   });
 };
 
-export default (pathToFile1, pathToFile2) => getAst(getObject(pathToFile1), getObject(pathToFile2));
+export default (pathToFile1, pathToFile2) => getAst(parseFile(pathToFile1), parseFile(pathToFile2));

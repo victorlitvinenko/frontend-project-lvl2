@@ -1,5 +1,5 @@
 import { getAst } from '../src/parsers';
 
-test('parse()', () => {
+test('getAst()', () => {
   expect(getAst()).toEqual([]);
 });

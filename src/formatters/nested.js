@@ -14,22 +14,21 @@ const render = (elements, level = 0) => {
   // console.log(elements);
   // return;
   const result = elements.reduce((acc, elem) => {
-    const prepareLine = (char) => (
+    const buildLine = (char) => (
       `${acc}\n${indent(level)}  ${char} ${elem.name}: ${stringify(elem.value, level + 1)}`
     );
     switch (elem.type) {
       case 'deleted':
-        return prepareLine('-');
+        return buildLine('-');
       case 'added':
-        return prepareLine('+');
+        return buildLine('+');
       case 'changed':
         return `${acc}\n${indent(level)}  - ${elem.name}: ${stringify(elem.value.old, level + 1)}
 ${indent(level)}  + ${elem.name}: ${stringify(elem.value.new, level + 1)}`;
       case 'nested':
         return `${acc}\n${indent(level)}    ${elem.name}: ${render(elem.value, level + 1)}`;
-      // case 'unchanged':
       default:
-        return prepareLine(' ');
+        return buildLine(' ');
     }
   }, '');
   return `{${result}\n${indent(level)}}`;
