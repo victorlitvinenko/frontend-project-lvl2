@@ -11,8 +11,6 @@ export const stringify = (value, level = 0) => {
 };
 
 const render = (elements, level = 0) => {
-  // console.log(elements);
-  // return;
   const result = elements.reduce((acc, elem) => {
     const buildLine = (char) => (
       `${acc}\n${indent(level)}  ${char} ${elem.name}: ${stringify(elem.value, level + 1)}`
