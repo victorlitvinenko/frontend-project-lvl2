@@ -23,60 +23,70 @@ Options:
 `[type]` - `plain`, `json`, `nested`  
 `<pathToFile>` - path to json, yaml or ini configuration file
 
-[![asciicast](https://asciinema.org/a/mDkLZm4HNMw9emKexJNvfSMHB.svg)](https://asciinema.org/a/mDkLZm4HNMw9emKexJNvfSMHB)
-
 ## Examples
 
 ### Flat JSON
 before.json:
-```{
+```
+{
   "host": "hexlet.io",
   "timeout": 50,
   "proxy": "123.234.53.22",
   "follow": false
-}```
+}
+```
 
 after.json:
-```{
+```
+{
   "timeout": 20,
   "verbose": true,
   "host": "hexlet.io"
-}```
+}
+```
 
 [![asciicast](https://asciinema.org/a/YrgRVpjeftgSvvuo0a7E1Zt1s.svg)](https://asciinema.org/a/YrgRVpjeftgSvvuo0a7E1Zt1s)
 
 ### Flat YAML
 before.yml:
-```host: hexlet.io
+```
+host: hexlet.io
 timeout: 50
 proxy: 123.234.53.22
-follow: false```
+follow: false
+```
 
 after.yml:
-```timeout: 20
+```
+timeout: 20
 verbose: true
-host: hexlet.io```
+host: hexlet.io
+```
 
 [![asciicast](https://asciinema.org/a/MpvpP3ssquBK1BkZAUTc5zl9Y.svg)](https://asciinema.org/a/MpvpP3ssquBK1BkZAUTc5zl9Y)
 
 ### Flat ini
-### Flat YAML
 before.ini:
-```host=hexlet.io
+```
+host=hexlet.io
 timeout=50
 proxy=123.234.53.22
-follow=false```
+follow=false
+```
 
 after.ini:
-```timeout=20
+```
+timeout=20
 verbose=true
-host=hexlet.io```
+host=hexlet.io
+```
 
 [![asciicast](https://asciinema.org/a/D0g7nN1rs7Rt3BCLu0R4PPAqW.svg)](https://asciinema.org/a/D0g7nN1rs7Rt3BCLu0R4PPAqW)
 
 ### Multi-level JSON
 before.json
-```{
+```
+{
   "common": {
     "setting1": "Value 1",
     "setting2": "200",
@@ -95,10 +105,12 @@ before.json
   "group2": {
     "abc": "12345"
   }
-}```
+}
+```
 
 after.json
-```{
+```
+{
   "common": {
     "follow": false,
     "setting1": "Value 1",
@@ -124,7 +136,8 @@ after.json
   "group3": {
     "fee": "100500"
   }
-}```
+}
+```
 
 [![asciicast](https://asciinema.org/a/Cjgt51o2W9PjC9SvdmxfCzwfc.svg)](https://asciinema.org/a/Cjgt51o2W9PjC9SvdmxfCzwfc)
 
