@@ -83,7 +83,7 @@ host=hexlet.io
 
 [![asciicast](https://asciinema.org/a/D0g7nN1rs7Rt3BCLu0R4PPAqW.svg)](https://asciinema.org/a/D0g7nN1rs7Rt3BCLu0R4PPAqW)
 
-### Multi-level JSON
+### Multi-level configuration files
 before.json
 ```
 {
