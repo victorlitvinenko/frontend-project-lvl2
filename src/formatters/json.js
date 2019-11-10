@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
 const stringify = (value) => {
   if (_.isObject(value)) {

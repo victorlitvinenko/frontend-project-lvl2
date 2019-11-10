@@ -1,8 +1,8 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
 const indent = (level) => ('    '.repeat(level));
 
-export const stringify = (value, level = 0) => {
+const stringify = (value, level = 0) => {
   if (_.isObject(value)) {
     const result = _.keys(value).reduce((acc, elem) => `${acc}${indent(level)}    ${elem}: ${value[elem]}\n`, '');
     return `{\n${result}${indent(level)}}`;

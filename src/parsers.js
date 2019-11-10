@@ -1,27 +1,19 @@
-const fs = require('fs');
-const _ = require('lodash');
-const ini = require('ini');
-const yaml = require('js-yaml');
-const path = require('path');
+import fs from 'fs';
+import _ from 'lodash';
+import ini from 'ini';
+import yaml from 'js-yaml';
+import path from 'path';
 
-const fileTypes = [
-  {
-    check: (arg) => path.extname(arg) === '.json',
-    process: JSON.parse,
-  },
-  {
-    check: (arg) => path.extname(arg) === '.yml',
-    process: yaml.safeLoad,
-  },
-  {
-    check: (arg) => path.extname(arg) === '.ini',
-    process: ini.parse,
-  },
-];
+const fileParsers = {
+  json: JSON.parse,
+  yml: yaml.safeLoad,
+  ini: ini.parse,
+};
 
 const parseFile = (pathToFile) => {
-  const { process } = fileTypes.find(({ check }) => check(pathToFile));
-  return process(fs.readFileSync(pathToFile, 'utf8'));
+  const fileContent = fs.readFileSync(pathToFile, 'utf8');
+  const parse = fileParsers[path.extname(pathToFile).substring(1)];
+  return parse(fileContent);
 };
 
 const keyTypes = [
@@ -54,7 +46,7 @@ const keyTypes = [
   },
 ];
 
-export const getAst = (config1 = {}, config2 = {}) => {
+const getAst = (config1 = {}, config2 = {}) => {
   const configsKeys = _.union(_.keys(config1), _.keys(config2)).sort();
   return configsKeys.map((key) => {
     const { type, process } = keyTypes.find(
@@ -65,4 +57,8 @@ export const getAst = (config1 = {}, config2 = {}) => {
   });
 };
 
-export default (pathToFile1, pathToFile2) => getAst(parseFile(pathToFile1), parseFile(pathToFile2));
+export default (pathToFile1, pathToFile2) => {
+  const config1 = parseFile(pathToFile1);
+  const config2 = parseFile(pathToFile2);
+  return getAst(config1, config2);
+};

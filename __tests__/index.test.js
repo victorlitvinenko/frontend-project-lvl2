@@ -1,6 +1,5 @@
+import fs from 'fs';
 import genDiff from '../src';
-
-const fs = require('fs');
 
 const extensionsWithFormats = [
   ['json', 'nested'], ['json', 'plain'], ['json', 'json'],
