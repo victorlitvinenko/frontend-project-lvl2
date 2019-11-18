@@ -21,10 +21,10 @@ const render = (elements, level = 0) => {
       case 'added':
         return buildLine('+');
       case 'changed':
-        return `${acc}\n${indent(level)}  - ${elem.name}: ${stringify(elem.value.old, level + 1)}
-${indent(level)}  + ${elem.name}: ${stringify(elem.value.new, level + 1)}`;
+        return `${acc}\n${indent(level)}  - ${elem.name}: ${stringify(elem.oldValue, level + 1)}
+${indent(level)}  + ${elem.name}: ${stringify(elem.value, level + 1)}`;
       case 'nested':
-        return `${acc}\n${indent(level)}    ${elem.name}: ${render(elem.value, level + 1)}`;
+        return `${acc}\n${indent(level)}    ${elem.name}: ${render(elem.children, level + 1)}`;
       default:
         return buildLine(' ');
     }

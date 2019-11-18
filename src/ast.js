@@ -4,29 +4,29 @@ const keyTypes = [
   {
     type: 'nested',
     check: (first, second, key) => (_.isObject(first[key]) && _.isObject(second[key])),
-    process: (first, second, fn) => fn(first, second),
+    process: (first, second, fn) => [null, null, fn(first, second)],
   },
   {
     type: 'unchanged',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] === second[key])),
-    process: (first) => _.identity(first),
+    process: (first) => [null, _.identity(first)],
   },
   {
     type: 'changed',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] !== second[key])),
-    process: (first, second) => ({ old: first, new: second }),
+    process: (first, second) => [first, second],
   },
   {
     type: 'deleted',
     check: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
-    process: (first) => _.identity(first),
+    process: (first) => [null, _.identity(first)],
   },
   {
     type: 'added',
     check: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
-    process: (first, second) => _.identity(second),
+    process: (first, second) => [null, _.identity(second)],
   },
 ];
 
@@ -36,8 +36,10 @@ const getAst = (config1 = {}, config2 = {}) => {
     const { type, process } = keyTypes.find(
       (item) => item.check(config1, config2, key),
     );
-    const value = process(config1[key], config2[key], getAst);
-    return { name: key, type, value };
+    const [oldValue, value, children] = process(config1[key], config2[key], getAst);
+    return {
+      name: key, type, oldValue, value, children,
+    };
   });
 };
 

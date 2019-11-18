@@ -12,9 +12,9 @@ const render = (elements) => {
   const result = elements.reduce((acc, elem) => {
     switch (elem.type) {
       case 'changed':
-        return [...acc, `{"name":"${elem.name}","type":"${elem.type}","value":${stringify(elem.value.old)},"newValue":${stringify(elem.value.new)}}`];
+        return [...acc, `{"name":"${elem.name}","type":"${elem.type}","value":${stringify(elem.oldValue)},"newValue":${stringify(elem.value)}}`];
       case 'nested':
-        return [...acc, `{"name":"${elem.name}","type":"${elem.type}","children":${render(elem.value)}}`];
+        return [...acc, `{"name":"${elem.name}","type":"${elem.type}","children":${render(elem.children)}}`];
       default:
         return [...acc, `{"name":"${elem.name}","type":"${elem.type}","value":${stringify(elem.value)}}`];
     }
