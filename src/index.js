@@ -1,16 +1,21 @@
 import fs from 'fs';
-import { parse, getFileType } from './parsers';
+import path from 'path';
+import parse from './parsers';
 import getAst from './ast';
 import render from './formatters';
 
-export default (pathToFile1, pathToFile2, format = 'nested') => {
-  if (fs.existsSync(pathToFile1) && fs.existsSync(pathToFile2)) {
-    const fileContent1 = fs.readFileSync(pathToFile1, 'utf8');
-    const fileType1 = getFileType(pathToFile1);
-    const config1 = parse(fileContent1, fileType1);
-    const fileContent2 = fs.readFileSync(pathToFile2, 'utf8');
-    const fileType2 = getFileType(pathToFile2);
-    const config2 = parse(fileContent2, fileType2);
+const readFile = (pathToFile) => fs.readFileSync(pathToFile, 'utf8');
+const getParserType = (pathToFile) => path.extname(pathToFile).substring(1);
+
+export default (path1, path2, format) => {
+  if (fs.existsSync(path1) && fs.existsSync(path2)) {
+    const data1 = readFile(path1);
+    const data2 = readFile(path2);
+    const parserType1 = getParserType(path1);
+    const parserType2 = getParserType(path2);
+    const config1 = parse(data1, parserType1);
+    const config2 = parse(data2, parserType2);
+
     const ast = getAst(config1, config2);
     return render(ast, format);
   }
