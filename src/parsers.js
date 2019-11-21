@@ -7,7 +7,7 @@ const parsers = {
   ini: ini.parse,
 };
 
-export default (content, type) => {
+export default (data, type) => {
   const process = parsers[type];
-  return process(content);
+  return process(data);
 };
