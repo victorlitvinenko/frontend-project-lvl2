@@ -6,20 +6,18 @@ const stringify = (value, level = 0) => {
   if (!_.isObject(value)) {
     return value;
   }
-  const lines = ['{'];
+  const lines = [];
   _.keys(value).forEach((elem) => {
     lines.push(`${indent(level)}    ${elem}: ${value[elem]}`);
   });
-  lines.push(`${indent(level)}}`);
-  return lines.join('\n');
+  const innerValue = lines.join('\n');
+  return `{\n${innerValue}\n${indent(level)}}`;
 };
 
 const render = (elements, level = 0) => {
-  const lines = ['{'];
+  const lines = [];
   elements.forEach((elem) => {
-    const buildLine = (char) => (
-      `${indent(level)}  ${char} ${elem.name}: ${stringify(elem.value, level + 1)}`
-    );
+    const buildLine = (char) => `${indent(level)}  ${char} ${elem.name}: ${stringify(elem.value, level + 1)}`;
     switch (elem.type) {
       case 'deleted':
         lines.push(buildLine('-'));
@@ -40,8 +38,8 @@ ${indent(level)}  + ${elem.name}: ${stringify(elem.value, level + 1)}`);
       default:
     }
   });
-  lines.push(`${indent(level)}}`);
-  return lines.join('\n');
+  const innerValue = lines.join('\n');
+  return `{\n${innerValue}\n${indent(level)}}`;
 };
 
 export default render;
