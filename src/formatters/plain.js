@@ -11,12 +11,14 @@ const render = (elements, parents = []) => {
       case 'added':
         return `${acc}Property '${fullName}' was added with value: ${stringify(elem.value)}\n`;
       case 'changed':
-        return `${acc}Property '${fullName}' was updated. From ${stringify(elem.oldValue)} to ${stringify(elem.value)}\n`;
+        return `${acc}Property '${fullName}' was updated. From ${stringify(elem.valueBefore)} to ${stringify(elem.value)}\n`;
       case 'nested':
         return `${acc}${render(elem.children, [...parents, elem.name])}`;
-      default:
+      case 'unchanged':
         return acc;
+      default:
     }
+    return acc;
   }, '');
   return result;
 };

@@ -1,10 +1,10 @@
-import ini from 'ini';
 import yaml from 'js-yaml';
+import parseIni from './parseIni';
 
 const parsers = {
   json: JSON.parse,
   yml: yaml.safeLoad,
-  ini: ini.parse,
+  ini: parseIni,
 };
 
 export default (data, type) => {

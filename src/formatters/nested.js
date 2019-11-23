@@ -3,33 +3,45 @@ import _ from 'lodash';
 const indent = (level) => ('    '.repeat(level));
 
 const stringify = (value, level = 0) => {
-  if (_.isObject(value)) {
-    const result = _.keys(value).reduce((acc, elem) => `${acc}${indent(level)}    ${elem}: ${value[elem]}\n`, '');
-    return `{\n${result}${indent(level)}}`;
+  if (!_.isObject(value)) {
+    return value;
   }
-  return value;
+  const lines = ['{'];
+  _.keys(value).forEach((elem) => {
+    lines.push(`${indent(level)}    ${elem}: ${value[elem]}`);
+  });
+  lines.push(`${indent(level)}}`);
+  return lines.join('\n');
 };
 
 const render = (elements, level = 0) => {
-  const result = elements.reduce((acc, elem) => {
+  const lines = ['{'];
+  elements.forEach((elem) => {
     const buildLine = (char) => (
-      `${acc}\n${indent(level)}  ${char} ${elem.name}: ${stringify(elem.value, level + 1)}`
+      `${indent(level)}  ${char} ${elem.name}: ${stringify(elem.value, level + 1)}`
     );
     switch (elem.type) {
       case 'deleted':
-        return buildLine('-');
+        lines.push(buildLine('-'));
+        break;
       case 'added':
-        return buildLine('+');
+        lines.push(buildLine('+'));
+        break;
       case 'changed':
-        return `${acc}\n${indent(level)}  - ${elem.name}: ${stringify(elem.oldValue, level + 1)}
-${indent(level)}  + ${elem.name}: ${stringify(elem.value, level + 1)}`;
+        lines.push(`${indent(level)}  - ${elem.name}: ${stringify(elem.valueBefore, level + 1)}
+${indent(level)}  + ${elem.name}: ${stringify(elem.value, level + 1)}`);
+        break;
       case 'nested':
-        return `${acc}\n${indent(level)}    ${elem.name}: ${render(elem.children, level + 1)}`;
+        lines.push(`${indent(level)}    ${elem.name}: ${render(elem.children, level + 1)}`);
+        break;
+      case 'unchanged':
+        lines.push(buildLine(' '));
+        break;
       default:
-        return buildLine(' ');
     }
-  }, '');
-  return `{${result}\n${indent(level)}}`;
+  });
+  lines.push(`${indent(level)}}`);
+  return lines.join('\n');
 };
 
 export default render;

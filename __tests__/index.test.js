@@ -18,5 +18,5 @@ test.each(extensionsWithFormats)(
 );
 
 test('genDiff(empty)', () => {
-  expect(genDiff()).toBeFalsy();
+  expect(() => genDiff()).toThrow();
 });
