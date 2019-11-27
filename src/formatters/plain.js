@@ -3,25 +3,21 @@ import _ from 'lodash';
 const stringify = (value) => (_.isObject(value) ? '[complex value]' : `'${value}'`);
 
 const render = (elements, parents = []) => {
-  const lines = [];
-  elements.forEach((elem) => {
+  const lines = elements.reduce((acc, elem) => {
     const fullName = [...parents, elem.name].join('.');
     switch (elem.type) {
       case 'deleted':
-        lines.push(`Property '${fullName}' was removed`);
-        break;
+        return [...acc, `Property '${fullName}' was removed`];
       case 'added':
-        lines.push(`Property '${fullName}' was added with value: ${stringify(elem.value)}`);
-        break;
+        return [...acc, `Property '${fullName}' was added with value: ${stringify(elem.valueAfter)}`];
       case 'changed':
-        lines.push(`Property '${fullName}' was updated. From ${stringify(elem.valueBefore)} to ${stringify(elem.value)}`);
-        break;
+        return [...acc, `Property '${fullName}' was updated. From ${stringify(elem.valueBefore)} to ${stringify(elem.valueAfter)}`];
       case 'nested':
-        lines.push(`${render(elem.children, [...parents, elem.name])}`);
-        break;
+        return [...acc, `${render(elem.children, [...parents, elem.name])}`];
       default:
+        return acc;
     }
-  });
+  }, []);
   return lines.join('\n');
 };
 

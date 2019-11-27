@@ -10,23 +10,23 @@ const keyTypes = [
     type: 'unchanged',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] === second[key])),
-    process: (first) => ({ value: first }),
+    process: (first) => ({ valueAfter: first }),
   },
   {
     type: 'changed',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] !== second[key])),
-    process: (first, second) => ({ valueBefore: first, value: second }),
+    process: (first, second) => ({ valueBefore: first, valueAfter: second }),
   },
   {
     type: 'deleted',
     check: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
-    process: (first) => ({ value: first }),
+    process: (first) => ({ valueBefore: first }),
   },
   {
     type: 'added',
     check: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
-    process: (first, second) => ({ value: second }),
+    process: (first, second) => ({ valueAfter: second }),
   },
 ];
 
@@ -36,9 +36,9 @@ const getAst = (config1 = {}, config2 = {}) => {
     const { type, process } = keyTypes.find(
       (item) => item.check(config1, config2, key),
     );
-    const { valueBefore, value, children } = process(config1[key], config2[key], getAst);
+    const { valueBefore, valueAfter, children } = process(config1[key], config2[key], getAst);
     return {
-      name: key, type, valueBefore, value, children,
+      name: key, type, valueBefore, valueAfter, children,
     };
   });
 };
