@@ -89,7 +89,7 @@ before.json
 {
   "common": {
     "setting1": "Value 1",
-    "setting2": "200",
+    "setting2": 200,
     "setting3": true,
     "setting6": {
       "key": "value"
@@ -103,7 +103,7 @@ before.json
     }
   },
   "group2": {
-    "abc": "12345"
+    "abc": 12345
   }
 }
 ```
@@ -134,7 +134,7 @@ after.json
   },
 
   "group3": {
-    "fee": "100500"
+    "fee": 100500
   }
 }
 ```
