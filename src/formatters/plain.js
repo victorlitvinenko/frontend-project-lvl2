@@ -1,3 +1,4 @@
+import errors from 'errno';
 import _ from 'lodash';
 
 const stringify = (value) => (_.isObject(value) ? '[complex value]' : `'${value}'`);
@@ -14,8 +15,10 @@ const render = (elements, parents = []) => {
         return [...acc, `Property '${fullName}' was updated. From ${stringify(elem.valueBefore)} to ${stringify(elem.valueAfter)}`];
       case 'nested':
         return [...acc, `${render(elem.children, [...parents, elem.name])}`];
-      default:
+      case 'unchanged':
         return acc;
+      default:
+        throw new Error(errors.code.ESRCH);
     }
   }, []);
   return lines.join('\n');
