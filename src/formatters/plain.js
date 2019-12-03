@@ -16,7 +16,7 @@ const render = (elements, parents = []) => {
       case 'nested':
         return `${render(elem.children, [...parents, elem.name])}`;
       case 'unchanged':
-        return '';
+        return null;
       default:
         throw new Error(errors.code.ESRCH);
     }
